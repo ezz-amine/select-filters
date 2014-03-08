@@ -12,9 +12,10 @@ $.fn.selectFilters = function(opt,p,v){
 		min:3,
 		on:"keyup", //keyup, keydown, change
 		multipleWord:{
-			active: true,
-			method  : "or" // "and" or "or"
-		}
+			active: false,
+			method  : "and" // "and" or "or"
+		},
+		accentFolding: true
 	};
 	functionCheck(opt,p,v);
 	check(opt,init);
@@ -68,6 +69,10 @@ $.fn.selectFilters = function(opt,p,v){
 		}
 		return fi;
 	}
+	function rd(str){
+		param = fi.data("param");
+		return param.accentFolding ? removeDiacritics(str) : str;
+	}
 	function event_triggered(e){
 		param= fi.data("param");
 		if(param.min <= $(this).val().length){
@@ -80,14 +85,14 @@ $.fn.selectFilters = function(opt,p,v){
 					var rep = (param.multipleWord.method == 'and');
 					$.each(words,function(id,val){
 						if(param.multipleWord.method == 'and'){
-							rep = rep && (opt.data("value").toLowerCase().indexOf(val.toLowerCase()) != -1);
+							rep = rep && (rd(opt.data("value")).toLowerCase().indexOf(rd(val).toLowerCase()) != -1);
 						}else{
-							rep = rep || (opt.data("value").toLowerCase().indexOf(val.toLowerCase()) != -1);
+							rep = rep || (rd(opt.data("value")).toLowerCase().indexOf(rd(val).toLowerCase()) != -1);
 						}
 					});
 					return rep;
 				}else{
-					return (opt.data("value").toLowerCase().indexOf(fi.val().toLowerCase()) != -1);
+					return (rd(opt.data("value")).toLowerCase().indexOf(rd(fi.val()).toLowerCase()) != -1);
 				}
 			}).appendTo(target);
 		}else{

@@ -4,6 +4,7 @@
 
 	Copyright (c) 2014 Ezzayer Amine **http://www.ezzayer.me
 	MIT license **https://raw.github.com/ezz-amine/select-filters/master/LICENSE
+	
  */
 $.fn.selectFilters = function(opt,p,v){
 	var fi = $(this[0]);

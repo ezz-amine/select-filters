@@ -7,6 +7,12 @@
 	
  */
 $.fn.selectFilters = function(opt,p,v){
+	if($(this).length > 1){
+		$(this).each(function(){
+			$(this).selectFilters(opt,p,v);
+		});
+		return false;
+	} 
 	var fi = $(this[0]);
 	var target = null;
 	var defaultParam = {

@@ -12,7 +12,7 @@ $.fn.selectFilters = function(opt,p,v){
 			$(this).selectFilters(opt,p,v);
 		});
 		return false;
-	} 
+	}
 	var fi = $(this[0]);
 	var target = null;
 	var defaultParam = {
@@ -41,7 +41,7 @@ $.fn.selectFilters = function(opt,p,v){
 			console.log("$.selectFilters need a select tag, a none select tag giving.");
 			return false;
 		}
-		optCheck(opt);
+		if(opt !== false) optCheck(opt);
 		callback();
 	}
 	function init(){
@@ -58,6 +58,7 @@ $.fn.selectFilters = function(opt,p,v){
 	function functionCheck(opt,p,v){
 		if(typeof opt === "string"){
 			if(opt == "option") return option(p,v);
+			if(opt == "reload") return reload();
 		}
 	}
 	function optCheck(opt){
@@ -75,6 +76,16 @@ $.fn.selectFilters = function(opt,p,v){
 			}
 		}
 		return fi;
+	}
+	function reload(){
+		check(false,function(){
+			target.find("option:not([data-value])").each(function(){
+				opt = $(this);
+				val = opt.text().trim();
+				opt.attr("data-value",val);
+			});
+			fi.data("options",target.find("option"));
+		});
 	}
 	function rd(str){
 		param = fi.data("param");

@@ -63,6 +63,11 @@ $.fn.selectFilters = function(opt,p,v){
 	}
 	function optCheck(opt){
 		opt = typeof opt === "undefined" ? {}  : opt;
+		if(fi.data("selectMin") != null) defaultParam.min = fi.data("selectMin");
+		if(fi.data("selectOn") != null) defaultParam.on = fi.data("selectOn");
+		if(fi.data("selectMultipleWordActive") != null) defaultParam.multipleWord.active = fi.data("selectMultipleWordActive");
+		if(fi.data("selectMultipleWordMethod") != null) defaultParam.multipleWord.method = fi.data("selectMultipleWordMethod");
+		if(fi.data("selectAccentFolding") != null) defaultParam.accentFolding = fi.data("selectAccentFolding");
 		fi.data("param",defaultParam);
 		$.extend(fi.data("param"),opt);
 	}

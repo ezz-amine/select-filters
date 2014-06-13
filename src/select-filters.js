@@ -44,7 +44,7 @@ $.fn.selectFilters = function(opt,p,v){
 			console.log("$.selectFilters need a select tag, a none select tag giving.");
 			return false;
 		}
-		optCheck(opt);
+		if(opt !== false) optCheck(opt);
 		callback();
 	}
 	function init(){
@@ -97,6 +97,16 @@ $.fn.selectFilters = function(opt,p,v){
 			fi.data("options",target.find("option"));
 		});
 		return fi.data("param");
+	}
+	function reload(){
+		check(false,function(){
+			target.find("option:not([data-value])").each(function(){
+				opt = $(this);
+				val = opt.text().trim();
+				opt.attr("data-value",val);
+			});
+			fi.data("options",target.find("option"));
+		});
 	}
 	function rd(str){
 		param = fi.data("param");

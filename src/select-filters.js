@@ -4,7 +4,7 @@
 
 	Copyright (c) 2014 Ezzayer Amine **http://www.ezzayer.me
 	MIT license **https://raw.github.com/ezz-amine/select-filters/master/LICENSE
-	
+
  */
 $.fn.selectFilters = function(opt,p,v){
 	if($(this).length > 1){
@@ -12,10 +12,10 @@ $.fn.selectFilters = function(opt,p,v){
 			$(this).selectFilters(opt,p,v);
 		});
 		return false;
-	} 
+	}
 	var fi = $(this[0]);
 	var target = null;
-	var defaultParam = {
+	var initDefaultparam = {
 		min:3,
 		on:"keyup", //keyup, keydown, change
 		multipleWord:{
@@ -24,8 +24,11 @@ $.fn.selectFilters = function(opt,p,v){
 		},
 		accentFolding: true
 	};
-	functionCheck(opt,p,v);
-	check(opt,init);
+	var defaultParam = null;
+	check(
+		functionCheck(opt,p,v),
+		init
+	);
 	function check(opt,callback){
 		if(!fi.is("input:text")){
 			console.log("$.selectFilters work only with text input.");
@@ -58,12 +61,20 @@ $.fn.selectFilters = function(opt,p,v){
 	function functionCheck(opt,p,v){
 		if(typeof opt === "string"){
 			if(opt == "option") return option(p,v);
+			if(opt == "reload") return reload();
 		}
+		return fi.data("param");
 	}
 	function optCheck(opt){
+		defaultParam = $.extend({},initDefaultparam);
 		opt = typeof opt === "undefined" ? {}  : opt;
+		if(fi.data("selectMin") != null) defaultParam.min = fi.data("selectMin");
+		if(fi.data("selectOn") != null) defaultParam.on = fi.data("selectOn");
+		if(fi.data("selectMultipleWordActive") != null) defaultParam.multipleWord.active = fi.data("selectMultipleWordActive");
+		if(fi.data("selectMultipleWordMethod") != null) defaultParam.multipleWord.method = fi.data("selectMultipleWordMethod");
+		if(fi.data("selectAccentFolding") != null) defaultParam.accentFolding = fi.data("selectAccentFolding");
+		defaultParam = $.extend(defaultParam,opt);
 		fi.data("param",defaultParam);
-		$.extend(fi.data("param"),opt);
 	}
 	function option(p,v){
 		if(typeof p !== "undefined"){
@@ -74,7 +85,18 @@ $.fn.selectFilters = function(opt,p,v){
 				param['p'] = v;
 			}
 		}
-		return fi;
+		return fi.data("param");
+	}
+	function reload(){
+		check(false,function(){
+			target.find("option:not([data-value])").each(function(){
+				opt = $(this);
+				val = opt.text().trim();
+				opt.attr("data-value",val);
+			});
+			fi.data("options",target.find("option"));
+		});
+		return fi.data("param");
 	}
 	function rd(str){
 		param = fi.data("param");
